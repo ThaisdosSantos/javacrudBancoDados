@@ -1,0 +1,100 @@
+CREATE TABLE Agencia (
+    CodCNPJ int PRIMARY KEY,
+    Nome varchar(50)
+);
+
+CREATE TABLE Destino (
+    CodDest int PRIMARY KEY,
+    LocalNome varchar(50),
+    Descricao varchar(50),
+    PrecoDest float,
+    fk_Promocao_CodProm int
+);
+
+CREATE TABLE Promocao (
+    PrecoDest float,
+    CodProm int PRIMARY KEY,
+    PrecoDesc float,
+    Nome varchar(50),
+    Descricao varchar(50)
+);
+
+CREATE TABLE Contatos (
+    CodCliente int PRIMARY KEY,
+    Email varchar(50),
+    EnderAgenc varchar(50),
+    fk_telefoneAgen_telefoneAgen_PK int,
+    Estado varchar(50),
+    Cep varchar(50),
+    fk_Agencia_CodCNPJ int
+);
+
+CREATE TABLE CadastroCliente (
+    CodCliente int PRIMARY KEY,
+    Nome varchar(50),
+    Cfp varchar(11),
+    Rg varchar(10),
+    Sexo varchar(50),
+    Email varchar(50),
+    Senha varchar(8)
+);
+
+CREATE TABLE Cliente (
+    CodCliente int PRIMARY KEY,
+    fk_CadastroCliente_CodCliente int
+);
+
+CREATE TABLE telefoneAgen (
+    telefoneAgen_PK int NOT NULL PRIMARY KEY,
+    telefoneAgen varchar(11)
+);
+
+CREATE TABLE incluir (
+    fk_Agencia_CodCNPJ int,
+    fk_Destino_CodDest int
+);
+
+CREATE TABLE Acessa (
+    fk_Contatos_CodCliente int,
+    fk_Cliente_CodCliente int
+);
+ 
+ALTER TABLE Destino ADD CONSTRAINT FK_Destino_2
+    FOREIGN KEY (fk_Promocao_CodProm)
+    REFERENCES Promocao (CodProm)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE Contatos ADD CONSTRAINT FK_Contatos_2
+    FOREIGN KEY (fk_telefoneAgen_telefoneAgen_PK)
+    REFERENCES telefoneAgen (telefoneAgen_PK)
+    ON DELETE NO ACTION;
+ 
+ALTER TABLE Contatos ADD CONSTRAINT FK_Contatos_3
+    FOREIGN KEY (fk_Agencia_CodCNPJ)
+    REFERENCES Agencia (CodCNPJ)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Cliente ADD CONSTRAINT FK_Cliente_2
+    FOREIGN KEY (fk_CadastroCliente_CodCliente)
+    REFERENCES CadastroCliente (CodCliente)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE incluir ADD CONSTRAINT FK_incluir_1
+    FOREIGN KEY (fk_Agencia_CodCNPJ)
+    REFERENCES Agencia (CodCNPJ)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE incluir ADD CONSTRAINT FK_incluir_2
+    FOREIGN KEY (fk_Destino_CodDest)
+    REFERENCES Destino (CodDest)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Acessa ADD CONSTRAINT FK_Acessa_1
+    FOREIGN KEY (fk_Contatos_CodCliente)
+    REFERENCES Contatos (CodCliente)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Acessa ADD CONSTRAINT FK_Acessa_2
+    FOREIGN KEY (fk_Cliente_CodCliente)
+    REFERENCES Cliente (CodCliente)
+    ON DELETE RESTRICT;
